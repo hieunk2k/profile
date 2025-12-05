@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="doc-title">Nguyễn Khắc Hiếu - Software Developer</title>
+    <!-- Tải Tailwind CSS CDN và Font Inter -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Cấu hình Tailwind cho màu sắc và font */
+        :root {
+            --neon-cyan: #00FFFF; /* Màu xanh neon chủ đạo */
+            --dark-bg: #0A0A0A; /* Màu nền đen sâu */
+            --text-color: #E0E0E0; /* Màu chữ sáng */
+        }
+        
+        /* Sử dụng Inter làm font mặc định */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s;
+        }
+
+        /* Định nghĩa hiệu ứng chuyển động cho nút CTA và neon */
+        .neon-text {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.6), 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+
+        .neon-border {
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .neon-button {
+            background-color: var(--neon-cyan);
+            color: #000000;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .neon-button:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Gradient cho tiêu đề Hero (High-tech look) */
+        .hero-title-gradient {
+            background: -webkit-linear-gradient(45deg, #FFFFFF 30%, var(--neon-cyan) 70%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Kỹ năng - Thanh tiến trình giả */
+        .skill-bar {
+            height: 8px;
+            background-color: #1A1A1A;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1D4ED8, var(--neon-cyan)); /* Gradient xanh đậm sang neon */
+            border-radius: 4px;
+        }
+        
+        /* Timeline */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -16px; /* Điều chỉnh vị trí của chấm tròn */
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-cyan);
+            z-index: 10;
+        }
+
+        .timeline-connector {
+            position: absolute;
+            left: -11px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #2D3748;
+        }
+
+        /* Canvas cho tuyết rơi */
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Đặt dưới tất cả các nội dung khác */
+            pointer-events: none; /* Đảm bảo không chặn tương tác chuột */
+        }
+        
+    </style>
+    <!-- Tải Icon Lucide cho thiết kế hiện đại -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="antialiased">
+
+    <!-- CANVAS HIỆU ỨNG TUYẾT RƠI (Chạy ngầm) -->
+    <canvas id="snow-canvas"></canvas>
+
+    <!-- 1. Header & Navigation (Sticky) -->
+    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-md shadow-lg border-b border-cyan-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo Monogram KH -->
+                <a href="#hero" class="text-3xl font-extrabold tracking-tight">
+                    <span class="neon-text">K</span><span class="text-white">H</span>
+                </a>
+                
+                <!-- Menu & Language Switcher -->
+                <div class="flex items-center space-x-6">
+                    <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                        <a href="#about" class="hover:text-cyan-400 transition duration-150" data-i18n="nav-about">Về tôi</a>
+                        <a href="#skills" class="hover:text-cyan-400 transition duration-150" data-i18n="nav-skills">Kỹ năng</a>
+                        <a href="#projects" class="hover:text-cyan-400 transition duration-150" data-i18n="nav-projects">Dự án</a>
+                        <a href="#experience" class="hover:text-cyan-400 transition duration-150" data-i18n="nav-experience">Kinh nghiệm</a>
+                        <a href="#contact" class="hover:text-cyan-400 transition duration-150" data-i18n="nav-contact">Liên hệ</a>
+                    </nav>
+
+                    <!-- Language Switcher -->
+                    <div class="flex space-x-2 text-sm font-semibold">
+                        <button id="lang-vi" onclick="switchLanguage('vi')" class="text-cyan-400 hover:text-white transition duration-150 border-b-2 border-cyan-400 pb-1">VI</button>
+                        <span class="text-gray-500">|</span>
+                        <button id="lang-en" onclick="switchLanguage('en')" class="text-gray-500 hover:text-white transition duration-150 border-b-2 border-transparent pb-1">EN</button>
+                    </div>
+
+                    <!-- Icon Menu Mobile (chưa implement JS cho dropdown) -->
+                    <button class="md:hidden text-white p-2 rounded-lg hover:bg-gray-800 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 relative z-0">
+        
+        <!-- 2. Hero Section -->
+        <section id="hero" class="text-center py-20 md:py-32 grid grid-cols-12 gap-8">
+            <!-- Content Center/Full Width (Dùng 12 cột cho bố cục này) -->
+            <div class="col-span-12">
+                <!-- Avatar AI/Chân dung Placeholder -->
+                <div class="mx-auto w-36 h-36 md:w-48 md:h-48 mb-8 rounded-full overflow-hidden neon-border p-0.5">
+                    <img src="https://placehold.co/400x400/1E3A8A/00FFFF?text=KH+AI" alt="Avatar Nguyễn Khắc Hiếu" class="w-full h-full object-cover rounded-full">
+                </div>
+
+                <!-- Tiêu đề -->
+                <h1 class="text-4xl md:text-6xl lg:text-8xl font-extrabold tracking-tighter mb-4 leading-tight">
+                    <span class="hero-title-gradient">Nguyễn Khắc Hiếu</span>
+                </h1>
+                <p class="text-lg md:text-2xl text-gray-400 mb-8 font-light" data-i18n="hero-title-role">
+                    Kỹ sư Phần mềm. Xây dựng các ứng dụng hiệu suất cao với kiến trúc hiện đại.
+                </p>
+
+                <!-- Nút CTA -->
+                <div class="flex justify-center space-x-4 md:space-x-6">
+                    <a href="#" class="px-8 py-3 rounded-xl font-semibold neon-button flex items-center shadow-lg" data-i18n="hero-cta-cv">
+                        <i data-lucide="download" class="w-5 h-5 mr-2"></i> Tải CV
+                    </a>
+                    <a href="#contact" class="px-8 py-3 rounded-xl font-semibold text-white neon-border hover:bg-cyan-900/30 flex items-center" data-i18n="hero-cta-contact">
+                        <i data-lucide="mail" class="w-5 h-5 mr-2"></i> Liên hệ
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Container cho các sections khác (Dùng lưới 12 cột cho các section) -->
+        <div class="space-y-28 md:space-y-40 pt-16">
+            
+            <!-- 3. About Section -->
+            <section id="about" class="pt-10">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 text-center neon-text" data-i18n="about-title">Về tôi</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 border border-gray-800 p-8 md:p-12 rounded-2xl bg-gray-900/50">
+                    
+                    <!-- Tiểu sử (8 cột trên desktop) -->
+                    <div class="md:col-span-8 space-y-4">
+                        <p class="text-lg text-gray-300" data-i18n="about-p1">
+                            Tôi là Nguyễn Khắc Hiếu, một Software Developer với <span class="neon-text">hơn 5 năm kinh nghiệm</span> trong việc phát triển các ứng dụng web quy mô lớn. Đam mê xây dựng các giải pháp hiệu suất cao, dễ bảo trì và tối ưu trải nghiệm người dùng.
+                        </p>
+                        <p class="text-lg text-gray-300" data-i18n="about-p2">
+                            Trọng tâm chuyên môn của tôi là các hệ thống Backend, API và Kiến trúc Microservices. Tôi luôn cập nhật và áp dụng các công nghệ mới nhất để mang lại giá trị tốt nhất cho sản phẩm.
+                        </p>
+                        <p class="text-lg text-gray-300" data-i18n="about-p3">
+                            Hiện đang tập trung vào tối ưu hóa cơ sở dữ liệu và triển khai trên môi trường <span class="neon-text">AWS (DevOps)</span>.
+                        </p>
+                    </div>
+
+                    <!-- Thông tin cơ bản (4 cột trên desktop) -->
+                    <div class="md:col-span-4 border-l border-gray-700 md:pl-8 space-y-4">
+                        <h3 class="text-xl font-semibold mb-4 border-b border-cyan-800 pb-2" data-i18n="about-info-title">Thông tin cơ bản</h3>
+                        <p><strong data-i18n="about-info-dob">Năm sinh:</strong> 2000</p>
+                        <p><strong data-i18n="about-info-position-key">Vị trí:</strong> <span data-i18n="about-info-position-value">Full-stack Developer</span></p>
+                        <p><strong data-i18n="about-info-specialty-key">Chuyên môn:</strong> <span data-i18n="about-info-specialty-value">Backend/API, Kiến trúc Hệ thống</span></p>
+                        <p><strong data-i18n="about-info-location-key">Địa điểm:</strong> <span data-i18n="about-info-location-value">Hà Nội, Việt Nam</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Skills Section -->
+            <section id="skills" class="pt-10">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 text-center neon-text" data-i18n="skills-title">Bộ Kỹ Năng & Công Cụ</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    
+                    <!-- Ngôn ngữ & Frameworks (6 cột trên desktop) -->
+                    <div class="md:col-span-6 space-y-6 p-6 rounded-xl bg-gray-900/50">
+                        <h3 class="text-2xl font-semibold mb-4 text-cyan-400" data-i18n="skills-backend-title">Backend & Database</h3>
+                        
+                        <!-- Skill Item 1 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">PHP / Laravel (90%)</span>
+                                <i data-lucide="server" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                        </div>
+
+                        <!-- Skill Item 2 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Node.js / Express (75%)</span>
+                                <i data-lucide="zap" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 75%;"></div></div>
+                        </div>
+
+                        <!-- Skill Item 3 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">MySQL / Redis (85%)</span>
+                                <i data-lucide="database" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+                        </div>
+
+                        <!-- Skill Item 4 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">API Design (REST, GraphQL) (95%)</span>
+                                <i data-lucide="plug" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- DevOps & Frontend (6 cột trên desktop) -->
+                    <div class="md:col-span-6 space-y-6 p-6 rounded-xl bg-gray-900/50">
+                        <h3 class="text-2xl font-semibold mb-4 text-cyan-400" data-i18n="skills-devops-title">Frontend & DevOps</h3>
+                        
+                        <!-- Skill Item 5 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">AWS (EC2, S3, RDS, Lambda) (80%)</span>
+                                <i data-lucide="cloud" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+                        </div>
+                        
+                        <!-- Skill Item 6 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Docker / Kubernetes (65%)</span>
+                                <i data-lucide="container" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 65%;"></div></div>
+                        </div>
+
+                        <!-- Skill Item 7 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Livewire / Alpine.js (90%)</span>
+                                <i data-lucide="combine" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                        </div>
+                        
+                        <!-- Skill Item 8 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">React / Vue.js (70%)</span>
+                                <i data-lucide="globe" class="w-5 h-5 text-cyan-400"></i>
+                            </div>
+                            <div class="skill-bar"><div class="skill-progress" style="width: 70%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 5. Projects Section -->
+            <section id="projects" class="pt-10">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 text-center neon-text" data-i18n="projects-title">Dự Án Tiêu Biểu</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Project Card 1 -->
+                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow-2xl hover:shadow-cyan-500/30 transition duration-300 transform hover:scale-[1.02]">
+                        <img src="https://placehold.co/600x400/1F2937/FFFFFF?text=Project+1" alt="Thumbnail Project 1" class="w-full h-48 object-cover border-b border-cyan-800">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-white" data-i18n="proj1-name">Hệ thống E-commerce đa kênh</h3>
+                            <p class="text-gray-400 text-sm mb-4" data-i18n="proj1-desc">Giải pháp quản lý bán hàng, kho, và tích hợp thanh toán cho các cửa hàng bán lẻ.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Laravel</span>
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Redis</span>
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">AWS SQS</span>
+                            </div>
+                            <a href="#" class="text-sm font-semibold neon-text hover:underline flex items-center">
+                                <span data-i18n="proj-detail-link">Xem chi tiết</span> <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 2 -->
+                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow-2xl hover:shadow-cyan-500/30 transition duration-300 transform hover:scale-[1.02]">
+                        <img src="https://placehold.co/600x400/1F2937/FFFFFF?text=Project+2" alt="Thumbnail Project 2" class="w-full h-48 object-cover border-b border-cyan-800">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-white" data-i18n="proj2-name">Nền tảng Quản lý Học tập Trực tuyến</h3>
+                            <p class="text-gray-400 text-sm mb-4" data-i18n="proj2-desc">Hệ thống E-Learning với tính năng live streaming và chấm điểm tự động.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Node.js</span>
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">React</span>
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Docker</span>
+                            </div>
+                            <a href="#" class="text-sm font-semibold neon-text hover:underline flex items-center">
+                                <span data-i18n="proj-detail-link">Xem chi tiết</span> <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 3 -->
+                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow-2xl hover:shadow-cyan-500/30 transition duration-300 transform hover:scale-[1.02]">
+                        <img src="https://placehold.co/600x400/1F2937/FFFFFF?text=Project+3" alt="Thumbnail Project 3" class="w-full h-48 object-cover border-b border-cyan-800">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-white" data-i18n="proj3-name">Ứng dụng Chatbot AI nội bộ</h3>
+                            <p class="text-gray-400 text-sm mb-4" data-i18n="proj3-desc">Tích hợp mô hình ngôn ngữ lớn để tự động hóa hỗ trợ khách hàng và nội bộ.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Python</span>
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Microservices</span>
+                                <span class="text-xs bg-cyan-900/50 text-cyan-400 px-3 py-1 rounded-full">Kafka</span>
+                            </div>
+                            <a href="#" class="text-sm font-semibold neon-text hover:underline flex items-center">
+                                <span data-i18n="proj-detail-link">Xem chi tiết</span> <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Experience / Timeline Section -->
+            <section id="experience" class="pt-10">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 text-center neon-text" data-i18n="experience-title">Kinh nghiệm làm việc</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <div class="md:col-span-12 relative border-l-2 border-gray-700 ml-4 md:ml-0 md:px-8">
+                        
+                        <!-- Đường kết nối timeline (chỉ là ảo để làm mượt đường kẻ chính) -->
+                        <div class="timeline-connector"></div>
+
+                        <!-- Item 1: Vị trí hiện tại -->
+                        <div class="timeline-item relative pl-8 pb-12">
+                            <div class="md:grid md:grid-cols-12 gap-6">
+                                <div class="md:col-span-3 text-sm text-gray-400 font-medium">2022 – Hiện tại</div>
+                                <div class="md:col-span-9 p-6 bg-gray-900/50 rounded-xl shadow-lg border border-cyan-900/50">
+                                    <h3 class="text-2xl font-bold text-cyan-400 mb-1" data-i18n="exp1-title">Senior Backend Developer</h3>
+                                    <p class="text-lg font-medium mb-3" data-i18n="exp1-company">Công ty Công nghệ XYZ</p>
+                                    <ul class="list-disc list-inside space-y-2 text-gray-300 ml-4">
+                                        <li data-i18n="exp1-li1-role"><span class="font-semibold" data-i18n="exp-role-key">Vai trò:</span> Dẫn dắt team 3 người trong việc phát triển và bảo trì API cho hơn 1 triệu người dùng.</li>
+                                        <li data-i18n="exp1-li2-achieve"><span class="font-semibold" data-i18n="exp-achieve-key">Thành tựu:</span> Giảm độ trễ API trung bình 35% thông qua tối ưu hóa query MySQL và triển khai Redis caching.</li>
+                                        <li data-i18n="exp1-li3-task"><span class="font-semibold" data-i18n="exp-task-key">Nhiệm vụ:</span> Thiết kế và triển khai kiến trúc Microservices sử dụng Docker trên AWS ECS.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2: Vị trí trước đó -->
+                        <div class="timeline-item relative pl-8 pb-12">
+                            <div class="md:grid md:grid-cols-12 gap-6">
+                                <div class="md:col-span-3 text-sm text-gray-400 font-medium">2019 – 2022</div>
+                                <div class="md:col-span-9 p-6 bg-gray-900/50 rounded-xl shadow-lg border border-cyan-900/50">
+                                    <h3 class="text-2xl font-bold text-cyan-400 mb-1" data-i18n="exp2-title">Full-stack Developer</h3>
+                                    <p class="text-lg font-medium mb-3" data-i18n="exp2-company">Công ty Digital Agency ABC</p>
+                                    <ul class="list-disc list-inside space-y-2 text-gray-300 ml-4">
+                                        <li data-i18n="exp2-li1-role"><span class="font-semibold" data-i18n="exp-role-key">Vai trò:</span> Phát triển các dự án client-side sử dụng Laravel và Vue.js.</li>
+                                        <li data-i18n="exp2-li2-achieve"><span class="font-semibold" data-i18n="exp-achieve-key">Thành tựu:</span> Xây dựng CMS tùy chỉnh, giúp team marketing giảm 50% thời gian đăng tải nội dung.</li>
+                                        <li data-i18n="exp2-li3-task"><span class="font-semibold" data-i18n="exp-task-key">Nhiệm vụ:</span> Thực hiện quy trình CI/CD cơ bản cho các ứng dụng web.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item Kết thúc timeline -->
+                        <div class="timeline-item relative pl-8 pb-4">
+                            <div class="md:grid md:grid-cols-12 gap-6">
+                                <div class="md:col-span-3 text-sm text-gray-400 font-medium">2018 – 2019</div>
+                                <div class="md:col-span-9 p-6 bg-gray-900/50 rounded-xl shadow-lg border border-cyan-900/50">
+                                    <h3 class="text-2xl font-bold text-cyan-400 mb-1" data-i18n="exp3-title">Developer Intern</h3>
+                                    <p class="text-lg font-medium mb-3" data-i18n="exp3-company">Khởi nghiệp Startup Z</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Contact Section -->
+            <section id="contact" class="pt-10">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 text-center neon-text" data-i18n="contact-title">Liên hệ</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 bg-gray-900/50 p-8 md:p-12 rounded-2xl border border-cyan-900/50">
+                    
+                    <!-- Form Liên hệ (8 cột trên desktop) -->
+                    <div class="md:col-span-8">
+                        <h3 class="text-2xl font-semibold mb-6 text-white" data-i18n="contact-form-title">Gửi tin nhắn cho tôi</h3>
+                        <form action="#" method="POST" class="space-y-6">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-400 mb-2" data-i18n="contact-form-email">Email của bạn</label>
+                                <input type="email" id="email" name="email" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 placeholder-gray-500 transition">
+                            </div>
+                            <div>
+                                <label for="content" class="block text-sm font-medium text-gray-400 mb-2" data-i18n="contact-form-content">Nội dung</label>
+                                <textarea id="content" name="content" rows="6" required class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 placeholder-gray-500 transition"></textarea>
+                            </div>
+                            <button type="submit" class="px-8 py-3 rounded-xl font-semibold neon-button flex items-center shadow-lg" data-i18n="contact-form-button">
+                                <i data-lucide="send" class="w-5 h-5 mr-2"></i> Gửi đi
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Social Links (4 cột trên desktop) -->
+                    <div class="md:col-span-4 md:border-l border-gray-700 md:pl-8 space-y-6">
+                        <h3 class="text-2xl font-semibold mb-4 text-white" data-i18n="contact-social-title">Theo dõi tôi</h3>
+                        <div class="space-y-4">
+                            <!-- GitHub -->
+                            <a href="https://github.com/hieu-khac" target="_blank" class="flex items-center space-x-3 text-gray-300 hover:text-cyan-400 transition">
+                                <i data-lucide="github" class="w-6 h-6 neon-text"></i>
+                                <span class="text-lg">hieu-khac</span>
+                            </a>
+                            <!-- LinkedIn -->
+                            <a href="https://linkedin.com/in/hieukhacnguyen" target="_blank" class="flex items-center space-x-3 text-gray-300 hover:text-cyan-400 transition">
+                                <i data-lucide="linkedin" class="w-6 h-6 neon-text"></i>
+                                <span class="text-lg">hieukhacnguyen</span>
+                            </a>
+                            <!-- Facebook -->
+                            <a href="https://facebook.com/hieu.khac.nguyen" target="_blank" class="flex items-center space-x-3 text-gray-300 hover:text-cyan-400 transition">
+                                <i data-lucide="facebook" class="w-6 h-6 neon-text"></i>
+                                <span class="text-lg">hieu.khac.nguyen</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 border-t border-cyan-900/50 bg-black/50">
+        <p class="text-sm text-gray-500" data-i18n="footer-text">
+            © 2025 Nguyễn Khắc Hiếu. Thiết kế với phong cách Neon Minimalist.
+        </p>
+    </footer>
+
+    <!-- Khởi tạo Lucide Icons và Logic Đa ngôn ngữ + Tuyết rơi -->
+    <script>
+        // Dữ liệu dịch thuật (giữ nguyên từ bản trước)
+        const translations = {
+            'vi': {
+                'doc-title': 'Nguyễn Khắc Hiếu - Software Developer',
+                'nav-about': 'Về tôi',
+                'nav-skills': 'Kỹ năng',
+                'nav-projects': 'Dự án',
+                'nav-experience': 'Kinh nghiệm',
+                'nav-contact': 'Liên hệ',
+                'hero-title-role': 'Kỹ sư Phần mềm. Xây dựng các ứng dụng hiệu suất cao với kiến trúc hiện đại.',
+                'hero-cta-cv': 'Tải CV',
+                'hero-cta-contact': 'Liên hệ',
+                'about-title': 'Về tôi',
+                'about-p1': 'Tôi là Nguyễn Khắc Hiếu, một Software Developer với <span class="neon-text">hơn 5 năm kinh nghiệm</span> trong việc phát triển các ứng dụng web quy mô lớn. Đam mê xây dựng các giải pháp hiệu suất cao, dễ bảo trì và tối ưu trải nghiệm người dùng.',
+                'about-p2': 'Trọng tâm chuyên môn của tôi là các hệ thống Backend, API và Kiến trúc Microservices. Tôi luôn cập nhật và áp dụng các công nghệ mới nhất để mang lại giá trị tốt nhất cho sản phẩm.',
+                'about-p3': 'Hiện đang tập trung vào tối ưu hóa cơ sở dữ liệu và triển khai trên môi trường <span class="neon-text">AWS (DevOps)</span>.',
+                'about-info-title': 'Thông tin cơ bản',
+                'about-info-dob': 'Năm sinh:',
+                'about-info-position-key': 'Vị trí:',
+                'about-info-position-value': 'Full-stack Developer',
+                'about-info-specialty-key': 'Chuyên môn:',
+                'about-info-specialty-value': 'Backend/API, Kiến trúc Hệ thống',
+                'about-info-location-key': 'Địa điểm:',
+                'about-info-location-value': 'Hà Nội, Việt Nam',
+                'skills-title': 'Bộ Kỹ Năng & Công Cụ',
+                'skills-backend-title': 'Backend & Database',
+                'skills-devops-title': 'Frontend & DevOps',
+                'projects-title': 'Dự Án Tiêu Biểu',
+                'proj1-name': 'Hệ thống E-commerce đa kênh',
+                'proj1-desc': 'Giải pháp quản lý bán hàng, kho, và tích hợp thanh toán cho các cửa hàng bán lẻ.',
+                'proj2-name': 'Nền tảng Quản lý Học tập Trực tuyến',
+                'proj2-desc': 'Hệ thống E-Learning với tính năng live streaming và chấm điểm tự động.',
+                'proj3-name': 'Ứng dụng Chatbot AI nội bộ',
+                'proj3-desc': 'Tích hợp mô hình ngôn ngữ lớn để tự động hóa hỗ trợ khách hàng và nội bộ.',
+                'proj-detail-link': 'Xem chi tiết',
+                'experience-title': 'Kinh nghiệm làm việc',
+                'exp1-title': 'Senior Backend Developer',
+                'exp1-company': 'Công ty Công nghệ XYZ',
+                'exp1-li1-role': '<span class="font-semibold" data-i18n="exp-role-key">Vai trò:</span> Dẫn dắt team 3 người trong việc phát triển và bảo trì API cho hơn 1 triệu người dùng.',
+                'exp1-li2-achieve': '<span class="font-semibold" data-i18n="exp-achieve-key">Thành tựu:</span> Giảm độ trễ API trung bình 35% thông qua tối ưu hóa query MySQL và triển khai Redis caching.',
+                'exp1-li3-task': '<span class="font-semibold" data-i18n="exp-task-key">Nhiệm vụ:</span> Thiết kế và triển khai kiến trúc Microservices sử dụng Docker trên AWS ECS.',
+                'exp2-title': 'Full-stack Developer',
+                'exp2-company': 'Công ty Digital Agency ABC',
+                'exp2-li1-role': '<span class="font-semibold" data-i18n="exp-role-key">Vai trò:</span> Phát triển các dự án client-side sử dụng Laravel và Vue.js.',
+                'exp2-li2-achieve': '<span class="font-semibold" data-i18n="exp-achieve-key">Thành tựu:</span> Xây dựng CMS tùy chỉnh, giúp team marketing giảm 50% thời gian đăng tải nội dung.',
+                'exp2-li3-task': '<span class="font-semibold" data-i18n="exp-task-key">Nhiệm vụ:</span> Thực hiện quy trình CI/CD cơ bản cho các ứng dụng web.',
+                'exp3-title': 'Developer Intern',
+                'exp3-company': 'Khởi nghiệp Startup Z',
+                'contact-title': 'Liên hệ',
+                'contact-form-title': 'Gửi tin nhắn cho tôi',
+                'contact-form-email': 'Email của bạn',
+                'contact-form-content': 'Nội dung',
+                'contact-form-button': 'Gửi đi',
+                'contact-social-title': 'Theo dõi tôi',
+                'footer-text': '© 2025 Nguyễn Khắc Hiếu. Thiết kế với phong cách Neon Minimalist.',
+                // Keys trong list item kinh nghiệm cần được dịch riêng để không bị đè nội dung list
+                'exp-role-key': 'Vai trò:',
+                'exp-achieve-key': 'Thành tựu:',
+                'exp-task-key': 'Nhiệm vụ:',
+            },
+            'en': {
+                'doc-title': 'Nguyen Khac Hieu - Software Developer',
+                'nav-about': 'About Me',
+                'nav-skills': 'Skills',
+                'nav-projects': 'Projects',
+                'nav-experience': 'Experience',
+                'nav-contact': 'Contact',
+                'hero-title-role': 'Software Engineer. Building high-performance applications with modern architecture.',
+                'hero-cta-cv': 'Download CV',
+                'hero-cta-contact': 'Contact',
+                'about-title': 'About Me',
+                'about-p1': 'I am Nguyen Khac Hieu, a Software Developer with <span class="neon-text">over 5 years of experience</span> in developing large-scale web applications. Passionate about building high-performance, maintainable solutions that optimize user experience.',
+                'about-p2': 'My professional focus is on Backend systems, APIs, and Microservices Architecture. I constantly update and apply the latest technologies to deliver the best value for the product.',
+                'about-p3': 'Currently focusing on database optimization and deployment in <span class="neon-text">AWS (DevOps)</span> environment.',
+                'about-info-title': 'Basic Information',
+                'about-info-dob': 'Year of Birth:',
+                'about-info-position-key': 'Position:',
+                'about-info-position-value': 'Full-stack Developer',
+                'about-info-specialty-key': 'Specialty:',
+                'about-info-specialty-value': 'Backend/API, System Architecture',
+                'about-info-location-key': 'Location:',
+                'about-info-location-value': 'Hanoi, Vietnam',
+                'skills-title': 'Skillset & Tools',
+                'skills-backend-title': 'Backend & Database',
+                'skills-devops-title': 'Frontend & DevOps',
+                'projects-title': 'Featured Projects',
+                'proj1-name': 'Multi-channel E-commerce System',
+                'proj1-desc': 'Sales and inventory management solution with payment integration for retail stores.',
+                'proj2-name': 'Online Learning Management Platform',
+                'proj2-desc': 'E-Learning system featuring live streaming and automatic grading capabilities.',
+                'proj3-name': 'Internal AI Chatbot Application',
+                'proj3-desc': 'Integration of large language models to automate internal and customer support.',
+                'proj-detail-link': 'View Details',
+                'experience-title': 'Work Experience',
+                'exp1-title': 'Senior Backend Developer',
+                'exp1-company': 'XYZ Tech Company',
+                'exp1-li1-role': '<span class="font-semibold" data-i18n="exp-role-key">Role:</span> Led a team of 3 in developing and maintaining APIs for over 1 million users.',
+                'exp1-li2-achieve': '<span class="font-semibold" data-i18n="exp-achieve-key">Achievement:</span> Reduced average API latency by 35% through MySQL query optimization and Redis caching implementation.',
+                'exp1-li3-task': '<span class="font-semibold" data-i18n="exp-task-key">Task:</span> Designed and implemented Microservices architecture using Docker on AWS ECS.',
+                'exp2-title': 'Full-stack Developer',
+                'exp2-company': 'ABC Digital Agency',
+                'exp2-li1-role': '<span class="font-semibold" data-i18n="exp-role-key">Role:</span> Developed client-side projects using Laravel and Vue.js.',
+                'exp2-li2-achieve': '<span class="font-semibold" data-i18n="exp-achieve-key">Achievement:</span> Built a custom CMS, helping the marketing team reduce content posting time by 50%.',
+                'exp2-li3-task': '<span class="font-semibold" data-i18n="exp-task-key">Task:</span> Implemented basic CI/CD pipeline for web applications.',
+                'exp3-title': 'Developer Intern',
+                'exp3-company': 'Startup Z Initiative',
+                'contact-title': 'Contact',
+                'contact-form-title': 'Send me a message',
+                'contact-form-email': 'Your Email',
+                'contact-form-content': 'Content',
+                'contact-form-button': 'Send',
+                'contact-social-title': 'Follow me',
+                'footer-text': '© 2025 Nguyen Khac Hieu. Designed with a Neon Minimalist style.',
+                // Keys trong list item kinh nghiệm cần được dịch riêng để không bị đè nội dung list
+                'exp-role-key': 'Role:',
+                'exp-achieve-key': 'Achievement:',
+                'exp-task-key': 'Task:',
+            }
+        };
+
+        let currentLang = 'vi';
+
+        // Hàm chuyển đổi ngôn ngữ
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // Sử dụng innerHTML để cho phép các tag <span> neon bên trong các đoạn văn
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            document.title = translations[lang]['doc-title'];
+            document.documentElement.lang = lang;
+            
+            // Cập nhật trạng thái nút chuyển đổi ngôn ngữ
+            document.getElementById('lang-vi').classList.toggle('text-cyan-400', lang === 'vi');
+            document.getElementById('lang-vi').classList.toggle('border-cyan-400', lang === 'vi');
+            document.getElementById('lang-vi').classList.toggle('text-gray-500', lang === 'en');
+            document.getElementById('lang-vi').classList.toggle('border-transparent', lang === 'en');
+
+            document.getElementById('lang-en').classList.toggle('text-cyan-400', lang === 'en');
+            document.getElementById('lang-en').classList.toggle('border-cyan-400', lang === 'en');
+            document.getElementById('lang-en').classList.toggle('text-gray-500', lang === 'vi');
+            document.getElementById('lang-en').classList.toggle('border-transparent', lang === 'vi');
+
+            // Khởi tạo lại Lucide Icons sau khi nội dung thay đổi
+            lucide.createIcons();
+        }
+
+        // --- Logic Hiệu ứng Tuyết rơi ---
+        let canvas, ctx, width, height, snowflakes;
+        const numberOfSnowflakes = 100;
+
+        // Định nghĩa lớp SnowFlake
+        class SnowFlake {
+            constructor() {
+                this.reset();
+                this.color = "rgba(255, 255, 255, " + (0.5 + Math.random() * 0.5) + ")";
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height; // Bắt đầu từ trên cùng
+                this.r = Math.random() * 2 + 0.5; // Kích thước hạt tuyết (0.5 đến 2.5)
+                this.d = Math.random() * numberOfSnowflakes; // Density
+                this.velocity = Math.random() * 0.5 + 0.5; // Tốc độ rơi (0.5 đến 1.0)
+                this.opacity = Math.random() * 0.5 + 0.5;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            update() {
+                // Tọa độ y tăng theo tốc độ
+                this.y += this.velocity;
+
+                // Tác động của gió (dao động ngang)
+                this.x += Math.sin(this.d / 50 + Date.now() / 1000) * 0.2;
+
+                // Khi hạt tuyết chạm đáy, đặt lại vị trí
+                if (this.y > height) {
+                    this.reset();
+                }
+            }
+        }
+
+        // Khởi tạo Canvas và Tuyết
+        function initSnow() {
+            canvas = document.getElementById("snow-canvas");
+            ctx = canvas.getContext("2d");
+            
+            // Hàm thay đổi kích thước canvas khi cửa sổ thay đổi
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Tạo các hạt tuyết
+            snowflakes = [];
+            for (let i = 0; i < numberOfSnowflakes; i++) {
+                snowflakes.push(new SnowFlake());
+            }
+
+            // Bắt đầu vòng lặp vẽ
+            animateSnow();
+        }
+
+        // Vòng lặp vẽ và cập nhật
+        function animateSnow() {
+            // Xóa canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Cập nhật và vẽ từng hạt tuyết
+            for (let i = 0; i < numberOfSnowflakes; i++) {
+                const flake = snowflakes[i];
+                flake.update();
+                flake.draw();
+            }
+
+            // Lặp lại vòng lặp
+            requestAnimationFrame(animateSnow);
+        }
+        // --- Kết thúc Logic Hiệu ứng Tuyết rơi ---
+
+
+        window.onload = function () {
+            // Khởi tạo icons lần đầu
+            lucide.createIcons();
+            // Thiết lập ngôn ngữ mặc định (vi) khi tải trang
+            switchLanguage(currentLang);
+            // Khởi tạo hiệu ứng tuyết rơi
+            initSnow();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng Dụng Tải Xuống CV</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Định nghĩa font Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+        }
+        /* Định kiểu cho CV */
+        #cv-content {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: white;
+            padding: 2.5rem; /* Tăng padding để giống trang giấy */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: #1e3a8a;
+        }
+    </style>
+    <!-- Tải thư viện html2canvas (để chuyển đổi HTML thành canvas/hình ảnh) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Tải thư viện jsPDF (để tạo và tải xuống PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="p-8">
+
+    <div class="flex flex-col items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Mẫu CV Chuyên Nghiệp</h1>
+        <button id="download-button" onclick="downloadCV()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300">
+            Tải xuống CV (PDF)
+        </button>
+    </div>
+
+    <!-- KHUNG CHỨA CV CẦN TẢI XUỐNG -->
+    <div id="cv-content" class="rounded-xl">
+        
+        <!-- HEADER / THÔNG TIN CÁ NHÂN -->
+        <header class="text-center mb-6 pb-4 border-b border-gray-200">
+            <h2 class="4xl font-extrabold text-gray-900">NGUYỄN VĂN AN</h2>
+            <p class="text-xl text-gray-600 mt-1">Lập trình viên Full Stack</p>
+            <div class="flex justify-center space-x-4 mt-3 text-sm text-gray-500">
+                <span><i class="fas fa-envelope"></i> an.nguyen@email.com</span>
+                <span>|</span>
+                <span><i class="fas fa-phone"></i> (84) 123 456 789</span>
+                <span>|</span>
+                <span><i class="fas fa-map-marker-alt"></i> TP. Hồ Chí Minh, Việt Nam</span>
+            </div>
+        </header>
+
+        <!-- TÓM TẮT MỤC TIÊU NGHỀ NGHIỆP -->
+        <section class="mb-6">
+            <h3 class="text-2xl font-bold section-title">Tóm Tắt</h3>
+            <p class="text-gray-700 leading-relaxed">
+                Chuyên gia phát triển phần mềm với 5 năm kinh nghiệm trong việc xây dựng và triển khai các ứng dụng web quy mô lớn. Thành thạo JavaScript (React, Node.js), TypeScript và có kinh nghiệm sâu rộng với kiến trúc microservices và cơ sở dữ liệu NoSQL. Tìm kiếm cơ hội để áp dụng kỹ năng kỹ thuật để giải quyết các thách thức phức tạp và thúc đẩy sự đổi mới.
+            </p>
+        </section>
+
+        <!-- KINH NGHIỆM LÀM VIỆC -->
+        <section class="mb-6">
+            <h3 class="text-2xl font-bold section-title">Kinh Nghiệm Làm Việc</h3>
+            
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold text-gray-800">Lập Trình Viên Cao Cấp</h4>
+                <p class="text-blue-600">Công ty Công nghệ XYZ | 2021 – Hiện tại</p>
+                <ul class="list-disc list-inside ml-4 mt-2 text-gray-700 space-y-1">
+                    <li>Dẫn dắt việc phát triển giao diện người dùng cho nền tảng thương mại điện tử (sử dụng React và Redux).</li>
+                    <li>Tối ưu hóa hiệu suất ứng dụng, giảm thời gian tải trang trung bình 30%.</li>
+                    <li>Tham gia thiết kế và triển khai 4 microservices backend mới bằng Node.js và Express.</li>
+                </ul>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold text-gray-800">Lập Trình Viên Junior</h4>
+                <p class="text-blue-600">Công ty Phần mềm ABC | 2019 – 2021</p>
+                <ul class="list-disc list-inside ml-4 mt-2 text-gray-700 space-y-1">
+                    <li>Phát triển các tính năng nhỏ và sửa lỗi trên ứng dụng quản lý nội bộ (sử dụng jQuery và PHP).</li>
+                    <li>Viết các bài kiểm thử đơn vị và kiểm thử tích hợp (JUnit).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- HỌC VẤN -->
+        <section class="mb-6">
+            <h3 class="text-2xl font-bold section-title">Học Vấn</h3>
+            <div class="mb-2">
+                <h4 class="text-lg font-semibold text-gray-800">Đại học Bách Khoa TP.HCM</h4>
+                <p class="text-blue-600">Kỹ sư Khoa học Máy tính | 2015 – 2019</p>
+                <p class="text-gray-700 text-sm">Điểm trung bình (GPA): 8.5/10</p>
+            </div>
+        </section>
+
+    </div>
+    <!-- KẾT THÚC KHUNG CV -->
+
+
+    <script>
+        // Hàm chuyển đổi nội dung CV thành PDF và tải xuống
+        window.downloadCV = async function() {
+            const cvContent = document.getElementById('cv-content');
+            
+            // Hiện thông báo đang xử lý
+            const downloadButton = document.getElementById('download-button');
+            downloadButton.textContent = 'Đang tạo PDF...';
+            downloadButton.disabled = true;
+
+            try {
+                // 1. Dùng html2canvas để chuyển nội dung CV thành canvas (hình ảnh)
+                const canvas = await html2canvas(cvContent, {
+                    scale: 2, // Tăng độ phân giải cho PDF rõ nét hơn
+                    useCORS: true,
+                    logging: false,
+                });
+
+                // 2. Lấy dữ liệu hình ảnh từ canvas
+                const imgData = canvas.toDataURL('image/png');
+
+                // 3. Khởi tạo jsPDF
+                // Sử dụng 'l' (landscape) hoặc 'p' (portrait). CV thường dùng 'p'.
+                // 'mm' là đơn vị (milimet)
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4'); // Khổ giấy A4
+
+                // Tính toán kích thước ảnh trên PDF
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pdfWidth;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let position = 0;
+                let heightLeft = imgHeight;
+
+                // Thêm hình ảnh vào PDF, xử lý trường hợp CV dài hơn 1 trang A4
+                if (imgHeight > pdfHeight) {
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        // Thêm trang mới nếu không phải trang đầu tiên
+                        if (heightLeft < imgHeight) {
+                            pdf.addPage();
+                        }
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pdfHeight;
+                    }
+                } else {
+                    // Nếu chỉ có 1 trang
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                }
+
+                // 4. Lưu tệp PDF
+                pdf.save('CV_Nguyen_Van_An.pdf');
+
+            } catch (error) {
+                console.error("Lỗi khi tạo PDF:", error);
+                // Vì không thể dùng alert() trong môi trường này, nên log lỗi ra console
+                console.log("Đã xảy ra lỗi trong quá trình tạo tệp PDF."); 
+            } finally {
+                // Khôi phục trạng thái nút
+                downloadButton.textContent = 'Tải xuống CV (PDF)';
+                downloadButton.disabled = false;
+            }
+        };
+
+    </script>
+</body>
+</html>

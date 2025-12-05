@@ -1,0 +1,98 @@
+:root {
+    --neon-cyan: #00FFFF;
+    --dark-bg: #000000;
+    --text-color: #E0E0E0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--dark-bg);
+    background: radial-gradient(circle at center, #0B0B1A 0%, #000005 80%, #000000 100%);
+    color: var(--text-color);
+    transition: background-color 0.3s;
+}
+
+.neon-text {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.6), 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+.neon-border {
+    border: 2px solid var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    transition: all 0.3s ease-in-out;
+}
+
+.neon-button {
+    background-color: var(--neon-cyan);
+    color: #000000;
+    transition: all 0.3s ease-in-out;
+}
+
+.neon-button:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.hero-title-gradient {
+    background: -webkit-linear-gradient(45deg, #FFFFFF 30%, var(--neon-cyan) 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.skill-bar {
+    height: 8px;
+    background-color: #1A1A1A;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #1D4ED8, var(--neon-cyan));
+    border-radius: 4px;
+}
+
+/* Timeline */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--neon-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-cyan);
+    z-index: 10;
+}
+
+.timeline-connector {
+    position: absolute;
+    left: -11px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #2D3748;
+}
+
+#snow-canvas, #dragon-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#snow-canvas { z-index: -2; }
+#dragon-canvas { z-index: -1; }
+
+#projects-scroll-container {
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none; /* IE and Edge */
+}
+#projects-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
