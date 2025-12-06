@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'projects-tip': 'Di chuột vào khu vực này để tạm dừng cuộn!',
             //project
             'proj1-name': 'Hệ thống quản lý cơ sở dữ liệu',
-            'proj1-desc': 'Hệ thống thu thập và quản lý dữ liệu người dùng cho nhiều dự án (click, view, form, ads), quản lý khảo sát, xử lý dữ liệu lớn và hỗ trợ gửi mail, import/export dữ liệu quy mô lớn',
+            'proj1-desc': 'Hệ thống thu thập và quản lý dữ liệu người dùng cho nhiều dự án, quản lý khảo sát, xử lý dữ liệu lớn và hỗ trợ gửi mail, import/export dữ liệu quy mô lớn.',
             'proj2-name': 'Hệ thống cho thuê bất động sản',
             'proj2-desc': 'Hệ thống giới thiệu và quản lý các thông tin cho thuê bất động sản.',
             'proj3-name': 'Hệ thống quản lý khu dân cư',
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             //project
             'proj1-name': 'Database management system',
-            'proj1-desc': 'System for collecting and managing user data for multiple projects (clicks, views, forms, ads), survey management, big data processing and email sending support, large-scale data import/export',
+            'proj1-desc': 'System for collecting and managing user data for multiple projects, survey management, big data processing and email sending support, large-scale data import/export.',
             'proj2-name': 'Real estate rental system',
             'proj2-desc': 'System for introducing and managing real estate rental information.',
             'proj3-name': 'Residential management system',
@@ -471,3 +471,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(startScroll, 100); 
 });
+
+(function() {
+    const MARQUEE_INTERVAL = 50000; // 50s
+    const ANIMATION_DURATION = 25000; //25s
+    const START_DELAY = 2000;
+
+    function showMarqueeOnce() {
+        const marqueeElement = document.getElementById('welcomeMarquee');
+        if (!marqueeElement) return;
+
+        const content = marqueeElement.querySelector('.marquee-content');
+        if (!content) return;
+
+        marqueeElement.classList.remove('hidden');
+
+        content.classList.remove('run');
+        // Force reflow to allow restarting the animation
+        void content.offsetWidth;
+        content.classList.add('run');
+
+        const onEnd = () => {
+            content.removeEventListener('animationend', onEnd);
+            marqueeElement.classList.add('hidden');
+            content.classList.remove('run');
+        };
+
+        content.addEventListener('animationend', onEnd);
+
+        setTimeout(() => {
+            marqueeElement.classList.add('hidden');
+            content.classList.remove('run');
+            content.removeEventListener('animationend', onEnd);
+        }, ANIMATION_DURATION + 200);
+    }
+
+    setTimeout(showMarqueeOnce, START_DELAY);
+    setInterval(showMarqueeOnce, MARQUEE_INTERVAL);
+})();

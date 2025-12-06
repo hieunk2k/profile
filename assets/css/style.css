@@ -96,3 +96,42 @@ body {
 #projects-scroll-container::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
 }
+
+@keyframes slide-left-once {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.marquee-wrapper {
+    background-color: rgba(28, 62, 70, 0.4);
+    border-top: 1px solid rgba(0, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    position: absolute; /* overlay, so it doesn't change document flow */
+    left: 0;
+    right: 0;
+    top: 100%; /* place just below the header content */
+    z-index: 49; /* under header (header has z-50) but above main content */
+}
+
+/* Hidden state (initial) - keep element in place but invisible to avoid layout jump */
+.marquee-wrapper.hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.marquee-content {
+    display: inline-block;
+    will-change: transform;
+}
+
+/* When `.run` is added, the content slides from right->left one time */
+.marquee-content.run {
+    animation: slide-left-once 25s linear forwards;
+}
+
+.marquee-text-block {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+}
